@@ -1,20 +1,26 @@
 from textnode import TextType, TextNode
 import os
 from copystatic import copy_contents
-from generate_path import generate_page
+from generate_path import generate_pages_recursive
 
 def main():
 	
 	node = TextNode("text", TextType.LINK, "somelink.com")
 	formatted = node.text_type.value.format(text=node.text, url=node.url)
 
-	copy_contents("/mnt/d/site_generator/static", "/mnt/d/site_generator/public")
-	markdown_file = "/mnt/d/site_generator/content/index.md"
-	template = "/mnt/d/site_generator/template.html"
-	destination = "/mnt/d/site_generator/public/index.html"
-	generate_page(markdown_file, template, destination)
+	current_script_dir = os.path.dirname(os.path.abspath(__file__))
+
+	project_root = os.path.dirname(current_script_dir)
+
+	static_path = os.path.join(project_root, "static")
+	public_path = os.path.join(project_root, "public")
+	content_index_path = os.path.join(project_root, "content")
+	template = os.path.join(project_root, "template.html")
+	content_destination = os.path.join(public_path)
 
 
+	copy_contents(static_path, public_path)
+	generate_pages_recursive(content_index_path, template, content_destination)
 
 
 

@@ -1,6 +1,7 @@
 import os
 from markdown_to_html import markdown_to_html_node, render_html_node
 from markdown_to_blocks import extract_title
+from pathlib import Path
 
 
 
@@ -18,7 +19,23 @@ def generate_page(from_path, template_path, dest_path):
     with open(dest_path, "w", encoding="utf-8") as f:
             f.write(filled_template)
     
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    content_root = Path(dir_path_content)
+    template = Path(template_path)
+    dest_root = Path(dest_dir_path)
 
+    def crawl(content_dir, dest_dir):
+        os.makedirs(dest_dir, exist_ok=True)
 
+        for name in os.listdir(content_dir):
+            content_path = os.path.join(content_dir, name)
+            dest_path = os.path.join(dest_dir, name)
 
-
+            if os.path.isfile(content_path):
+                if name.endswith(".md"):
+                    dest_html_path = str(Path(dest_path).with_suffix(".html"))
+                    generate_page(content_path, str(template), dest_html_path)
+            else:
+                crawl(content_path, dest_path)
+    crawl(str(content_root), str(dest_root))
+                
