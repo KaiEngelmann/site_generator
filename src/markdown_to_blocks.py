@@ -53,4 +53,13 @@ def block_to_block_type(block):
 
 
 
+def extract_title(markdown):
+    blocks = markdown_to_blocks(markdown)
+    for block in blocks:
+        if re.match(r"^# ", block):
+            match = block[1:]
+            return match.strip()
 
+        
+    else:
+        raise Exception("No h1 header")

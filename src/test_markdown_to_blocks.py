@@ -86,7 +86,26 @@ This is a [link](url) with a ![image]
             block_type, BlockType.QUOTE
         )
     
+    def test_extract_simple_h1(self):
+        md = "# My Title\n\nSome content"
+        result = extract_title(md)
+        self.assertEqual(result, "My Title")
 
+    def test_extract_h1_not_first_block(self):
+        md = "Some intro text\n\n# Real Title\n\nMore text"
+        result = extract_title(md)
+        self.assertEqual(result, "Real Title")
+
+    def test_no_h1_raises_exception(self):
+        md = "## Subtitle\n\nSome content"
+        with self.assertRaises(Exception) as context:
+            extract_title(md)
+        self.assertIn("No h1 header", str(context.exception))
+
+    def test_multiple_hashes_but_only_h1_counts(self):
+        md = "## Not a title\n\n#     Correct Title\n\nMore text"
+        result = extract_title(md)
+        self.assertEqual(result, "Correct Title")
 
 
 if __name__ == "__main__":

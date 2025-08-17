@@ -5,6 +5,23 @@ from split_nodes_delimiter import text_to_textnodes
 from textnode import TextNode, TextType
 import re
 
+
+Jasmine = """
+##### **Flowers** are _cool_
+
+1. roses
+2. tulips
+3. sunflowers 
+
+```
+def flowers(self):
+    for flower in flowers:
+        return flower
+```
+
+
+"""
+
 md = """
 ### This is a heading
 
@@ -42,7 +59,10 @@ def markdown_to_html_node(markdown):
         elif block_type == BlockType.QUOTE:
             li_children = []
             for line in block.splitlines():
-                content = line[1:] if line[1] != " " else line[2:]
+                if len(line) > 1:
+                    content = line[1:] if line[1] != " " else line[2:]
+                else:
+                    content = ""
                 li_children.extend(text_to_children(content))
             child_nodes.append(HTMLNode(tag="blockquote", children=li_children))
         elif block_type == BlockType.CODE:
@@ -95,6 +115,10 @@ def render_html_node(node):
         raise TypeError("Unknown node type")
 
 
+
 html_tree = markdown_to_html_node(md)
 html_string = render_html_node(html_tree)
-print(html_string)
+
+
+html_tree = markdown_to_html_node(Jasmine)
+html_string = render_html_node(html_tree)
