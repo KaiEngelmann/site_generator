@@ -17,8 +17,8 @@ def generate_page(from_path, template_path, dest_path, basepath):
     filled_template = template_file.replace("{{ Title }}", title).replace("{{ Content }}", html_string)
     if not basepath.endswith("/"):
         basepath += "/"
-    filled_template = filled_template.replace(f'href="{basepath}')
-    filled_template = filled_template.replace(f'src="{basepath}')
+    filled_template = filled_template.replace('href="/', f'href="{basepath}')
+    filled_template = filled_template.replace('src="/', f'src="{basepath}')
     os.makedirs(os.path.dirname(dest_path), exist_ok=True)
     with open(dest_path, "w", encoding="utf-8") as f:
             f.write(filled_template)
