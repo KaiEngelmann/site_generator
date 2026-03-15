@@ -16,10 +16,10 @@ def main():
 	current_script_dir = os.path.dirname(os.path.abspath(__file__))
 	project_root = os.path.dirname(current_script_dir)
 
-	static_path = os.path.join(project_root, "static")
+	static_path = sys.argv[3] if len(sys.argv) > 3 else os.path.join(project_root, "static")
 	public_path = os.path.join(project_root, "docs")
-	content_index_path = os.path.join(project_root, "content")
-	template = os.path.join(project_root, "template.html")
+	content_index_path = sys.argv[2] if len(sys.argv) > 2 else os.path.join(project_root, "content")
+	template = sys.argv[4] if len(sys.argv) > 4 else os.path.join(project_root, "template.html")
 	content_destination = public_path
 
 
